@@ -9,7 +9,7 @@ const { chromium } = require('playwright');
   // Correct base URL from the case study
   const baseUrl = 'https://sanand0.github.io/tdsdata/js_table/?seed=';
   
-  for (let seed = 81; seed <= 90; seed++) {
+  for (let seed = 29; seed <= 38; seed++) {
     try {
       const url = `${baseUrl}${seed}`;
       console.log(`Navigating to: ${url}`);
