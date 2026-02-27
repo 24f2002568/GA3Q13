@@ -12,11 +12,12 @@ const BASE = 'https://sanand0.github.io/tdsdata/playwright/';
   for (const seed of seeds) {
     await page.goto(`${BASE}?seed=${seed}`);
 
-    const numbers = await page.$$eval('table td', tds =>
-      tds
-        .map(td => td.innerText.trim())
-        .filter(x => /^-?\d+(\.\d+)?$/.test(x))
-        .map(Number)
+    const numbers = await page.$$eval('body *', elements =>
+      elements
+        .map(el => el.innerText)
+        .join(' ')
+        .match(/-?\d+(\.\d+)?/g)
+        ?.map(Number) || []
     );
 
     total += numbers.reduce((a, b) => a + b, 0);
