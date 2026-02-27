@@ -10,8 +10,7 @@ const BASE = 'https://sanand0.github.io/tdsdata/playwright/';
   let total = 0;
 
   for (const seed of seeds) {
-    const url = `${BASE}?seed=${seed}`;
-    await page.goto(url);
+    await page.goto(`${BASE}?seed=${seed}`);
 
     const numbers = await page.$$eval('table td', tds =>
       tds
@@ -23,7 +22,7 @@ const BASE = 'https://sanand0.github.io/tdsdata/playwright/';
     total += numbers.reduce((a, b) => a + b, 0);
   }
 
-  console.log('FINAL TOTAL =', total);
+  console.log('Sum =', total);
 
   await browser.close();
 })();
