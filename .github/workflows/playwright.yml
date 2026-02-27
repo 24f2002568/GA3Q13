@@ -22,4 +22,4 @@ jobs:
           npx playwright install chromium
 
       - name: Run scraper – 24f2002568@ds.study.iitm.ac.in
-        run: node scrape.js
+        run: node scrape.cjs
