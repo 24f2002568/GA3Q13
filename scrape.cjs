@@ -6,23 +6,43 @@ const { chromium } = require('playwright');
   
   let totalSum = 0;
   
-  // Loop through seeds 81 to 90
+  // Correct base URL from the case study
+  const baseUrl = 'https://sanand0.github.io/tdsdata/js_table/?seed=';
+  
   for (let seed = 81; seed <= 90; seed++) {
-    // Replace with actual URL pattern from case study
-    await page.goto(`https://ds.study.iitm.ac.in/static/seed-${seed}.html`);
-    
-    // Extract all numbers from tables
-    const numbers = await page.$$eval('table td', cells => 
-      cells.map(cell => parseFloat(cell.textContent) || 0)
-    );
-    
-    const pageSum = numbers.reduce((a, b) => a + b, 0);
-    totalSum += pageSum;
-    
-    console.log(`Seed ${seed} sum: ${pageSum}`);
+    try {
+      const url = `${baseUrl}${seed}`;
+      console.log(`Navigating to: ${url}`);
+      
+      await page.goto(url, { waitUntil: 'networkidle' });
+      
+      // Wait for the table to be present
+      await page.waitForSelector('table', { timeout: 10000 });
+      
+      // Get all numbers from all table cells (td elements)
+      const numbers = await page.$$eval('table td', cells => 
+        cells.map(cell => {
+          const text = cell.textContent.trim();
+          // Parse as integer (all numbers in the table are integers)
+          const num = parseInt(text, 10);
+          return isNaN(num) ? 0 : num;
+        })
+      );
+      
+      const pageSum = numbers.reduce((a, b) => a + b, 0);
+      totalSum += pageSum;
+      
+      console.log(`Seed ${seed} sum: ${pageSum} (from ${numbers.length} numbers)`);
+      
+      // Optional: Add a small delay to be gentle on the server
+      await page.waitForTimeout(1000);
+      
+    } catch (error) {
+      console.log(`Error on seed ${seed}: ${error.message}`);
+    }
   }
   
-  console.log(`FINAL TOTAL SUM: ${totalSum}`);
+  console.log(`\n🎉 FINAL TOTAL SUM FOR SEEDS 81-90: ${totalSum}`);
   
   await browser.close();
 })();
