@@ -23,7 +23,7 @@ const BASE = 'https://sanand0.github.io/tdsdata/playwright/';
     total += numbers.reduce((a, b) => a + b, 0);
   }
 
-  console.log('Sum =', total);
+ console.log(`Sum:${total}`);
 
   await browser.close();
 })();
